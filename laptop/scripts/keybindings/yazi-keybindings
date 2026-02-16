@@ -1,0 +1,61 @@
+NAVIGATION
+---------------------------------------------------------
+k  / Up             Move cursor up
+j  / Down           Move cursor down
+h  / Left           Go to parent directory
+l  / Right          Enter directory / Open file
+gg                  Go to top of file list
+G                   Go to bottom of file list
+Ctrl+d              Scroll down half-page
+Ctrl+u              Scroll up half-page
+
+JUMPING (GO TO)
+---------------------------------------------------------
+gh                  Go to Home
+gc                  Go to ~/.config
+gd                  Go to Downloads
+g/                  Go to Root (/)
+gt                  Go to Trash (system dependent)
+
+FILE OPERATIONS
+---------------------------------------------------------
+y                   Copy selected files (Yank)
+x                   Cut selected files
+p                   Paste files
+d                   Move to Trash
+D                   Permanently delete (requires confirm)
+r                   Rename file
+a                   Create new file (end with / for folder)
+.                   Toggle hidden files
+Space               Toggle selection
+Ctrl+a              Select all
+v                   Enter visual selection mode
+;                   Run shell command
+:                   Run shell command (blocking)
+
+SEARCHING & SORTING
+---------------------------------------------------------
+/                   Find file in current dir
+n                   Next find match
+N                   Previous find match
+s                   Search via fd (by name)
+S                   Search via ripgrep (by content)
+f                   Filter files
+,m / ,M             Sort by Modified time (Asc/Desc)
+,a / ,A             Sort Alphabetically (Asc/Desc)
+,s / ,S             Sort by Size (Asc/Desc)
+,n / ,N             Sort Naturally (Asc/Desc)
+
+TABS
+---------------------------------------------------------
+t                   Create new tab
+w                   Close tab
+[                   Previous tab
+]                   Next tab
+1-9                 Switch to specific tab number
+
+MISC
+---------------------------------------------------------
+~  / F1             Open Help menu
+z                   Jump using Zoxide
+q                   Quit
