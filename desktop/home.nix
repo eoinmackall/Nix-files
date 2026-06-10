@@ -32,7 +32,7 @@
 	}
 	{
 	  timeout = 1800;
-	  on-timeout = "systemctl suspend-then-hibernate";
+	  on-timeout = "systemctl suspend";
         }
       ];
     };
@@ -49,10 +49,17 @@
     flint
     (python3.withPackages (python-pkgs: with python-pkgs; [
       jupyter
+      pandas
       matplotlib
     ]))
     (texliveMedium.withPackages (
       PackageSet: with PackageSet; [
+        geometry
+        xcolor
+        multirow
+	tools
+        enumitem
+        soul
       ]
     ))
   ];
@@ -66,7 +73,7 @@
     settings = {
       user = {
         name = "Eoin Mackall";
-	email = "eoinmackall@gmail.com";
+        email = "eoinmackall@gmail.com";
       };
     };
   };
@@ -90,6 +97,19 @@
     keybindings = {
       "ctrl+shift+n" = "new_os_window_with_cwd";
     };
+  };
+
+  programs.obs-studio = {
+    enable = true;
+
+    package = (
+      pkgs.obs-studio.override {
+        cudaSupport = true;
+      }
+    );
+
+    plugins = with pkgs.obs-studio-plugins; [
+    ];
   };
 
   home.stateVersion = "25.11";

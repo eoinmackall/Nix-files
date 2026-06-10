@@ -22,6 +22,7 @@
        force_zero_scaling = true;
       };
     };
+    systemd.enable = false;
   };
   
   services.hyprpolkitagent.enable = true;

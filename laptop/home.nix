@@ -45,6 +45,7 @@
   home.packages = with pkgs; [
     openssh
     ripgrep
+    unzip
     julia
     gap-full
     singular
@@ -57,8 +58,12 @@
     (texliveMedium.withPackages (
       PackageSet: with PackageSet; [
         #Write package names here if needed
+        multirow
+        enumitem
+	xltabular
 	]
       ))
+    obs-studio
     thunderbird
   ];
 
@@ -84,7 +89,8 @@
     # TODO add your custom bashrc here
     bashrcExtra = ''
       export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
-    
+    '';
+    initExtra = ''
       bind '"\e[A": history-search-backward'
       bind '"\e[B": history-search-forward' 
     '';

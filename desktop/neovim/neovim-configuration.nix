@@ -32,7 +32,7 @@
           type = "lua";
           #config = ''
           #  require('nvim-treesitter-legacy.config').setup {
-	  #    highlight = { enable = true },
+          #    highlight = { enable = true },
           #  }
           #'';
       }
@@ -69,11 +69,20 @@
       vim.g.mapleader = ' '
       
       vim.opt.number = true
-      vim.opt.shiftwidth = 2
+      vim.opt.shiftwidth = 4
       vim.opt.expandtab = true
-      vim.opt.tabstop = 2
+      vim.opt.tabstop = 4
       vim.opt.clipboard:append("unnamedplus")
 
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "*", 
+        callback = function()
+          -- Completely disable insert-mode indent triggers
+          vim.opt_local.indentkeys = ""
+          vim.opt_local.cinkeys = ""
+        end,
+      })
+      
       -- Neo-tree keymap
       vim.keymap.set('n', '\\', ':Neotree toggle<CR>', { noremap = true, silent = true })
      
@@ -82,6 +91,17 @@
       vim.keymap.set('n', '<leader>f', builtin.find_files, { desc = 'Search Files' })
       vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = 'Search Grep' })
       vim.keymap.set('n', '<leader><space>', builtin.buffers, { desc = 'Search Buffers' })
+
+      -- Exit terminal mode with double Escape
+      vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
+ 
+      -- Window navigation with Ctrl + hjkl
+      vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Navigate left' })
+      vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Navigate down' })
+      vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Navigate up' })
+      vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Navigate right' }) 
+      
     '';
   };
 }
+

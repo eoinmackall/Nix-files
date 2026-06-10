@@ -15,7 +15,6 @@ case "$Menu_option" in
 	"Bolt")
 		flatpak run com.adamcake.Bolt;;
 
-
 	"Canvas") 
 		firefox "https://its.ucsc.edu/services/teaching-and-learning/learning-management/canvas-learning-management-system/";;
 
@@ -26,8 +25,8 @@ case "$Menu_option" in
 		firefox "https://gemini.google.com/app";;
 	
 	"Julia") 
-		kitty -e julia;;
-
+		kitty -e env LD_PRELOAD=/run/current-system/sw/share/nix-ld/lib/libquadmath.so.0 julia;;
+	
 	"Keybindings") 
 		exec /etc/nixos/scripts/keybindings/keybindings-menu.sh;;
 
@@ -41,4 +40,3 @@ case "$Menu_option" in
 		kitty -e yazi;;
 
 esac
-

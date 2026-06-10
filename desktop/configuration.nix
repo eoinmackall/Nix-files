@@ -68,6 +68,11 @@
   # Add Nvidia drivers
   services.xserver.videoDrivers = [ "nvidia" ];
 
+  services.ollama = {
+    enable = true;
+    package = pkgs.ollama-cuda; 
+  };
+
   # Enable Flatpak
   services.flatpak.enable = true;
 
@@ -94,6 +99,11 @@
   services.devmon.enable = true;
   services.gvfs.enable = true;
   services.udisks2.enable = true;
+
+  services.udev.extraRules = ''
+    # Garmin vivoactive 5 - Force MTP recognition
+    SUBSYSTEM=="usb", ATTR{idVendor}=="091e", ATTR{idProduct}=="514a", ENV{ID_MTP_DEVICE}="1", ENV{ID_MEDIA_PLAYER}="1", MODE="0666", GROUP="users"
+    '';
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.eoinm = {
@@ -130,6 +140,9 @@
     material-design-icons
     nerd-fonts.ubuntu
     hyprpolkitagent
+    libmtp
+    jmtpfs
+    (llama-cpp.override { cudaSupport = true; }) 
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
@@ -142,6 +155,7 @@
 
   programs.hyprland = {
     enable = true;
+    withUWSM = true;
     portalPackage = pkgs.xdg-desktop-portal-hyprland;
   };
 
