@@ -15,8 +15,9 @@
       "$mainMod, M, exec, /etc/nixos/scripts/tofi-menu.sh"
       "$mainMod, B, exec, $browser"
       "$mainMod, P, exec, /etc/nixos/scripts/power-menu.sh" 
-      "$mainMod, I, togglesplit," # dwindle
-      "$mainMod SHIFT, F, fullscreen," 
+      "$mainMod, I, layoutmsg, togglesplit" # dwindle
+      "$mainMod SHIFT, F, fullscreen,"
+      "$mainMod, Print, exec, grim -g \"$(slurp)\" - | wl-copy"
       
       # Move focus with mainMod + VIM keys
       "$mainMod, H, movefocus, l"
@@ -81,7 +82,7 @@
     ];
 
     bindr = [
-      "SUPER, Super_L, exec, noctalia-shell ipc call launcher toggle"
+      "SUPER, Super_L, exec, noctalia msg panel-toggle launcher"
     ];
 
     # Requires playerctl

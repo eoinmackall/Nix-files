@@ -1,12 +1,63 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, inputs, ... }:
 
+let
+  sddm-astronaut = (pkgs.sddm-astronaut.override {
+    embeddedTheme = "jake_the_dog";
+    themeConfig = {
+      HeaderTextColor="#000000";
+      DateTextColor="#000000";
+      TimeTextColor="#000000";
+
+      FormBackgroundColor="#18a7d6";
+      BackgroundColor="#18a7d6";
+      DimBackgroundColor="#18a7d6";
+      
+      LoginFieldBackgroundColor="#9bbec9";
+      PasswordFieldBackgroundColor="#9bbec9";
+      LoginFieldTextColor="#000000";
+      PasswordFieldTextColor="#000000";
+      UserIconColor="#000000";
+      PasswordIconColor="#000000";
+      
+      PlaceholderTextColor="#32302f";
+      WarningColor="#b32020";
+      
+      LoginButtonTextColor="#faf6f0";
+      LoginButtonBackgroundColor="#000000";
+      SystemButtonsIconsColor="#000000";
+      SessionButtonTextColor="#000000";
+      VirtualKeyboardButtonTextColor="#000000";
+      
+      DropdownTextColor="#000000";
+      DropdownSelectedBackgroundColor="#CCfaf6f0";
+      DropdownBackgroundColor="#9bbec9";
+
+      HighlightTextColor="#faf6f0";
+      HighlightBackgroundColor="#9bbec9";
+      HighlightBorderColor="transparent";
+
+      HoverUserIconColor="#FFFFFF";
+      HoverPasswordIconColor="#FFFFFF";
+      HoverSystemButtonsIconsColor="#FFFFFF";
+      HoverSessionButtonTextColor="#FFFFFF";
+      HoverVirtualKeyboardButtonTextColor="#FFFFFF";
+
+      BlurMax="48";
+      Blur="1.0";
+
+      Background = "Backgrounds/520180.jpg";
+    };
+  }).overrideAttrs (oldAttrs: {
+    installPhase = oldAttrs.installPhase + ''
+      chmod u+w $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/
+      cp ${./wallpaper/520180.jpg} \
+        $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/520180.jpg
+    '';
+  });
+in
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
     ];
 
@@ -24,29 +75,23 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Nix-features
   nix.settings.experimental-features = [ "nix-command" "flakes"];
+  
+  # Allow unfree packages (needed for Cuda)
+  nixpkgs.config.allowUnfree = true;
 
-  networking.hostName = "nixos-desktop"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
+  # Networking
+  networking.hostName = "nixos-desktop";
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
+  # Timezone
   time.timeZone = "America/Los_Angeles";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
     LC_IDENTIFICATION = "en_US.UTF-8";
@@ -65,13 +110,19 @@
     variant = "";
   };
 
-  # Add Nvidia drivers
+  # Nvidia drivers
   services.xserver.videoDrivers = [ "nvidia" ];
 
+  # Ollama server and local chat interface 
   services.ollama = {
     enable = true;
     package = pkgs.ollama-cuda; 
   };
+
+  services.open-webui = {
+    enable = true;
+    port = 8080;
+  }; 
 
   # Enable Flatpak
   services.flatpak.enable = true;
@@ -90,7 +141,15 @@
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
+    package = pkgs.kdePackages.sddm;
+    extraPackages = with pkgs; [
+      kdePackages.qtmultimedia
+    ];
+    theme = "sddm-astronaut-theme";
   };
+
+  # Enable the OpenSSH daemon.
+  services.openssh.enable = true;
 
   # Enables d-bus
   services.dbus.enable = true;
@@ -100,31 +159,29 @@
   services.gvfs.enable = true;
   services.udisks2.enable = true;
 
+  # To recognize my Garmin watch
   services.udev.extraRules = ''
     # Garmin vivoactive 5 - Force MTP recognition
     SUBSYSTEM=="usb", ATTR{idVendor}=="091e", ATTR{idProduct}=="514a", ENV{ID_MTP_DEVICE}="1", ENV{ID_MEDIA_PLAYER}="1", MODE="0666", GROUP="users"
     '';
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+ 
+  # User account  
   users.users.eoinm = {
     isNormalUser = true;
     description = "Eoin Mackall";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [];
   };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+ 
+  # System packages
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    wget
     neovim
     git
     kitty
     wl-clipboard
+    grim
+    slurp
     clipse
     yazi
     pavucontrol
@@ -134,17 +191,21 @@
     hyprsunset
     brightnessctl
     udiskie
+    sddm-astronaut
     rose-pine-hyprcursor
-    nerd-fonts.ubuntu-mono
-    nerd-fonts.symbols-only
-    material-design-icons
-    nerd-fonts.ubuntu
     hyprpolkitagent
     libmtp
     jmtpfs
     (llama-cpp.override { cudaSupport = true; }) 
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
+
+  # Hyprland
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true;
+    portalPackage = pkgs.xdg-desktop-portal-hyprland;
+  };
 
   xdg.portal = {
     enable = true;
@@ -153,15 +214,10 @@
     ];
   };
 
-  programs.hyprland = {
-    enable = true;
-    withUWSM = true;
-    portalPackage = pkgs.xdg-desktop-portal-hyprland;
-  };
-
+  # Browswer
   programs.firefox.enable = true;
 
-  # Allow dynamically-linked executables (have to read more/allows Julia Pkgs)
+  # Allow dynamically-linked executables (allows Julia Pkgs)
   programs.nix-ld = {
     enable = true;
     libraries = with pkgs; [
@@ -170,29 +226,14 @@
     ];
   };
 
+  # System fonts
   fonts.packages = with pkgs; [
+    nerd-fonts.ubuntu
     nerd-fonts.ubuntu-mono
     nerd-fonts.symbols-only
     material-design-icons
   ]; 
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
- 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
+  
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave

@@ -32,7 +32,7 @@
           type = "lua";
           #config = ''
           #  require('nvim-treesitter-legacy.config').setup {
-          #    highlight = { enable = true },
+	  #    highlight = { enable = true },
           #  }
           #'';
       }
@@ -94,7 +94,10 @@
 
       -- Exit terminal mode with double Escape
       vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
- 
+
+      -- Paste over highlighted text without losing your copied text
+      vim.keymap.set("x", "p", '"_dP', { desc = "Paste without overwriting register" })
+
       -- Window navigation with Ctrl + hjkl
       vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Navigate left' })
       vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Navigate down' })

@@ -8,6 +8,7 @@
     ./hyprland/hyprland-configuration.nix
     ./hyprland/hyprlock-configuration.nix
     ./neovim/neovim-configuration.nix
+    ./noctalia/noctalia-configuration.nix
   ];
 
   services.ssh-agent.enable = true;
@@ -62,6 +63,7 @@
         soul
       ]
     ))
+    open-webui
   ];
 
   home.shellAliases = {
@@ -73,7 +75,7 @@
     settings = {
       user = {
         name = "Eoin Mackall";
-        email = "eoinmackall@gmail.com";
+	email = "eoinmackall@gmail.com";
       };
     };
   };
@@ -102,6 +104,7 @@
   programs.obs-studio = {
     enable = true;
 
+    # optional Nvidia hardware acceleration
     package = (
       pkgs.obs-studio.override {
         cudaSupport = true;

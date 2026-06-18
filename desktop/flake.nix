@@ -8,7 +8,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
+      url = "github:noctalia-dev/noctalia";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -20,18 +20,18 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./configuration.nix
-	  home-manager.nixosModules.home-manager
-	  {
-	    home-manager.useGlobalPkgs = true;
-	    home-manager.useUserPackages = true;
-	    home-manager.backupFileExtension = "hm-back";
-	    home-manager.users.eoinm = {
-	      imports = [
-	        ./home.nix
-	      ];
-	    };
-	  }
-	  ./noctalia.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "hm-back";
+            home-manager.users.eoinm = {
+              imports = [
+                ./home.nix
+		inputs.noctalia.homeModules.default
+              ];
+            };
+          }
         ];
       };
     };
