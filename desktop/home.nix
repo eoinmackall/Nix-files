@@ -18,13 +18,13 @@
     settings = {
       general = {
         lock_cmd = "pidof hyprlock || hyprlock";
-	before_sleep_cmd = "loginctl lock-session";
-	after_sleep_cmd = "hyprctl dispatch dpms on";
+        before_sleep_cmd = "loginctl lock-session";
+        after_sleep_cmd = "hyprctl dispatch dpms on";
       };
       listener = [
         {
-	  timeout=600;
-	  on-timeout = "loginctl lock-session";
+          timeout=600;
+          on-timeout = "loginctl lock-session";
 	}
 	{
 	  timeout = 660;
@@ -58,7 +58,7 @@
         geometry
         xcolor
         multirow
-	tools
+        tools
         enumitem
         soul
       ]
@@ -75,7 +75,7 @@
     settings = {
       user = {
         name = "Eoin Mackall";
-	email = "eoinmackall@gmail.com";
+        email = "eoinmackall@gmail.com";
       };
     };
   };
@@ -103,14 +103,11 @@
 
   programs.obs-studio = {
     enable = true;
-
-    # optional Nvidia hardware acceleration
     package = (
       pkgs.obs-studio.override {
         cudaSupport = true;
       }
     );
-
     plugins = with pkgs.obs-studio-plugins; [
     ];
   };
