@@ -1,60 +1,5 @@
 { config, pkgs, inputs, ... }:
 
-let
-  sddm-astronaut = (pkgs.sddm-astronaut.override {
-    embeddedTheme = "jake_the_dog";
-    themeConfig = {
-      HeaderTextColor="#000000";
-      DateTextColor="#000000";
-      TimeTextColor="#000000";
-
-      FormBackgroundColor="#18a7d6";
-      BackgroundColor="#18a7d6";
-      DimBackgroundColor="#18a7d6";
-      
-      LoginFieldBackgroundColor="#9bbec9";
-      PasswordFieldBackgroundColor="#9bbec9";
-      LoginFieldTextColor="#000000";
-      PasswordFieldTextColor="#000000";
-      UserIconColor="#000000";
-      PasswordIconColor="#000000";
-      
-      PlaceholderTextColor="#32302f";
-      WarningColor="#b32020";
-      
-      LoginButtonTextColor="#faf6f0";
-      LoginButtonBackgroundColor="#000000";
-      SystemButtonsIconsColor="#000000";
-      SessionButtonTextColor="#000000";
-      VirtualKeyboardButtonTextColor="#000000";
-      
-      DropdownTextColor="#000000";
-      DropdownSelectedBackgroundColor="#CCfaf6f0";
-      DropdownBackgroundColor="#9bbec9";
-
-      HighlightTextColor="#faf6f0";
-      HighlightBackgroundColor="#9bbec9";
-      HighlightBorderColor="transparent";
-
-      HoverUserIconColor="#FFFFFF";
-      HoverPasswordIconColor="#FFFFFF";
-      HoverSystemButtonsIconsColor="#FFFFFF";
-      HoverSessionButtonTextColor="#FFFFFF";
-      HoverVirtualKeyboardButtonTextColor="#FFFFFF";
-
-      BlurMax="48";
-      Blur="1.0";
-
-      Background = "Backgrounds/520180.jpg";
-    };
-  }).overrideAttrs (oldAttrs: {
-    installPhase = oldAttrs.installPhase + ''
-      chmod u+w $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/
-      cp ${./wallpaper/520180.jpg} \
-        $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/520180.jpg
-    '';
-  });
-in
 {
   imports =
     [
@@ -191,13 +136,66 @@ in
     hyprsunset
     brightnessctl
     udiskie
-    sddm-astronaut
     rose-pine-hyprcursor
     hyprpolkitagent
+    thunderbird
     libmtp
     jmtpfs
     (llama-cpp.override { cudaSupport = true; }) 
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+    ((pkgs.sddm-astronaut.override {
+      embeddedTheme = "jake_the_dog";
+      themeConfig = {
+        HeaderTextColor="#000000";
+        DateTextColor="#000000";
+        TimeTextColor="#000000";
+
+        FormBackgroundColor="#18a7d6";
+        BackgroundColor="#18a7d6";
+        DimBackgroundColor="#18a7d6";
+      
+        LoginFieldBackgroundColor="#9bbec9";
+        PasswordFieldBackgroundColor="#9bbec9";
+        LoginFieldTextColor="#000000";
+        PasswordFieldTextColor="#000000";
+        UserIconColor="#000000";
+        PasswordIconColor="#000000";
+      
+        PlaceholderTextColor="#32302f";
+        WarningColor="#b32020";
+      
+        LoginButtonTextColor="#faf6f0";
+        LoginButtonBackgroundColor="#000000";
+        SystemButtonsIconsColor="#000000";
+        SessionButtonTextColor="#000000";
+        VirtualKeyboardButtonTextColor="#000000";
+      
+        DropdownTextColor="#000000";
+        DropdownSelectedBackgroundColor="#CCfaf6f0";
+        DropdownBackgroundColor="#9bbec9";
+
+        HighlightTextColor="#faf6f0";
+        HighlightBackgroundColor="#9bbec9";
+        HighlightBorderColor="transparent";
+
+        HoverUserIconColor="#FFFFFF";
+        HoverPasswordIconColor="#FFFFFF";
+        HoverSystemButtonsIconsColor="#FFFFFF";
+        HoverSessionButtonTextColor="#FFFFFF";
+        HoverVirtualKeyboardButtonTextColor="#FFFFFF";
+
+        BlurMax="48";
+        Blur="1.0";
+
+        Background = "Backgrounds/520180.jpg";
+      };
+    }).overrideAttrs (oldAttrs: {
+      installPhase = oldAttrs.installPhase + ''
+        chmod u+w $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/
+        cp ${./wallpaper/520180.jpg} \
+          $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/520180.jpg
+      '';
+    }))
   ];
 
   # Hyprland

@@ -12,42 +12,47 @@
       url = "github:nix-community/lanzaboote/v1.0.0";
       inputs.nixpkgs.follows="nixpkgs";
     };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
     # Maybe add nixos-hardware to this in the future, if they get the
     # screen to be functional, etc.
-    outputs = inputs@{nixpkgs, home-manager, lanzaboote, ...}: {      
-        nixosConfigurations = {
-	  nixos = nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
-	    specialArgs = { inherit inputs; };
-	    modules = [
-	      ./configuration.nix
-	      #nixos-hardware.nixosModules.microsoft-surface-laptop-amd
-	      home-manager.nixosModules.home-manager
-	      {
-	        home-manager.useGlobalPkgs = true;
-	        home-manager.useUserPackages = true;
-	        home-manager.backupFileExtension = "hm-back";
-		home-manager.users.eoinm = {
-	          imports = [
-		    ./home.nix
-		  ];
-	        };
-	      }
-	      lanzaboote.nixosModules.lanzaboote
-	      ({ pkgs, lib, ...}: {
-	        environment.systemPackages = [
-		pkgs.sbctl
+  outputs = inputs@{nixpkgs, home-manager, lanzaboote, ...}: {      
+    nixosConfigurations = {
+      nixos = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+          modules = [
+            ./configuration.nix
+	    #nixos-hardware.nixosModules.microsoft-surface-laptop-amd
+	    home-manager.nixosModules.home-manager
+            {
+	      home-manager.useGlobalPkgs = true;
+	      home-manager.useUserPackages = true;
+	      home-manager.backupFileExtension = "hm-back";
+       	      home-manager.users.eoinm = {
+	        imports = [
+                  ./home.nix
+                  inputs.noctalia.homeModules.default
 		];
-		boot.loader.systemd-boot.enable = lib.mkForce false;
-		boot.lanzaboote = {
-		  enable = true;
-		  pkiBundle = "/var/lib/sbctl";
-		};
-	      })
-	    ];
-	  };
-        };
-      };
+	      };
+	     }
+	     lanzaboote.nixosModules.lanzaboote
+	     ({ pkgs, lib, ...}: {
+	       environment.systemPackages = [
+               pkgs.sbctl
+               ];
+	       boot.loader.systemd-boot.enable = lib.mkForce false;
+               boot.lanzaboote = {
+                 enable = true;
+                 pkiBundle = "/var/lib/sbctl";
+	       };
+            })
+           ];
+         };
+       };
+     };
 }

@@ -84,6 +84,11 @@
       ",XF86MonBrightnessDown, exec, brightnessctl -e4 -n2 set 5%-"
     ];
 
+    
+    bindr = [
+      "SUPER, Super_L, exec, noctalia msg panel-toggle launcher"
+    ];
+
     # Requires playerctl
     bindl = [
       ", XF86AudioNext, exec, playerctl next"

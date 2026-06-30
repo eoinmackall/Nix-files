@@ -1,40 +1,34 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
-      #./build-machines.nix
+    [ 
       ./hardware-configuration.nix
     ];
+
+  # Hardware
+  hardware.bluetooth.enable = true;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  #kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = false;  # Enables wireless support via wpa_supplicant.
-  # Enable networking
-  networking.networkmanager.enable = true;
-
+ 
+  # Nix-features
   nix.settings.experimental-features = [ "nix-command" "flakes"];
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
 
-    # Set your time zone.
+  # Networking 
+  networking.hostName = "nixos";
+  networking.networkmanager.enable = true;
+
+  # Timezone
   time.timeZone = "America/Los_Angeles";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
     LC_IDENTIFICATION = "en_US.UTF-8";
@@ -46,41 +40,30 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  #services.xserver.displayManager.gdm.enable = true;
-  #services.xserver.desktopManager.gnome.enable = true;
-
+ 
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
     variant = "";
   };
 
-  # Enable KDE Plasma 6
-  #services.desktopManager.plasma6.enable = true;
+  # Battery monitor
+  services.upower.enable = true;
 
-  # Enable displayManager and Wayland for display manager
+  #Enables power-profiles (balanced, power-saver, etc.)
+  services.power-profiles-daemon.enable = true;
+  
+  # Login greeter
   services.displayManager.sddm = {
     enable = true;
-  #  theme = "catppuccin-mocha";
-  };
-
-  services.displayManager.sddm.wayland.enable = true;
-
-  #services.displayManager.ly = {
-  #  enable = true;
-  #}; 
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable bluetooth
-  hardware.bluetooth.enable = true;
-
+    wayland.enable = true;
+    package = pkgs.kdePackages.sddm;
+    extraPackages = with pkgs; [
+      kdePackages.qtmultimedia
+    ];
+    theme = "sddm-astronaut-theme";
+  }; 
+  
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -89,16 +72,7 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
  
   #Enables D-bus (communication middleware)
   services.dbus.enable = true;
@@ -107,9 +81,6 @@
   services.devmon.enable = true;
   services.gvfs.enable = true;
   services.udisks2.enable = true;
-
-  #Enables power-profiles (balanced, power-saver, etc.)
-  services.power-profiles-daemon.enable = true;
 
   #Enables Flatpaks/Flathub
   services.flatpak.enable = true;
@@ -123,6 +94,94 @@
     #  thunderbird
     ];
   };
+     
+  # System packages
+  environment.systemPackages = with pkgs; [
+    wget
+    git
+    neovim
+    wl-clipboard
+    kitty
+    yazi
+    tofi
+    pavucontrol
+    hyprcursor
+    hyprlock
+    hypridle
+    hyprshot
+    hyprsunset
+    brightnessctl
+    rose-pine-hyprcursor
+    blueberry
+    eog
+    udiskie
+    hyprpolkitagent
+    clipse
+    inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+    sbctl #secure boot key generator
+    ((pkgs.sddm-astronaut.override {
+      embeddedTheme = "jake_the_dog";
+      themeConfig = {
+        HeaderTextColor="#0b0c0d";
+        DateTextColor="#0b0c0d";
+        TimeTextColor="#0b0c0d";
+
+        FormPosition = "left";
+
+        FormBackgroundColor="#6b5491";
+        BackgroundColor="#6b5491";
+        DimBackgroundColor="#6b5491";
+      
+        LoginFieldBackgroundColor="#aa9bc9";
+        PasswordFieldBackgroundColor="#aa9bc9";
+        LoginFieldTextColor="#0b0c0d";
+        PasswordFieldTextColor="#0b0c0d";
+        UserIconColor="#0b0c0d";
+        PasswordIconColor="#0b0c0d";
+      
+        PlaceholderTextColor="#32302f";
+        WarningColor="#b32020";
+      
+        LoginButtonTextColor="#faf6f0";
+        LoginButtonBackgroundColor="#0b0c0d";
+        SystemButtonsIconsColor="#0b0c0d";
+        SessionButtonTextColor="#0b0c0d";
+        VirtualKeyboardButtonTextColor="#0b0c0d";
+      
+        DropdownTextColor="#0b0c0d";
+        DropdownSelectedBackgroundColor="#CCfaf6f0";
+        DropdownBackgroundColor="#aa9bc9";
+
+        HighlightTextColor="#faf6f0";
+        HighlightBackgroundColor="#aa9bc9";
+        HighlightBorderColor="transparent";
+
+        HoverUserIconColor="#FFFFFF";
+        HoverPasswordIconColor="#FFFFFF";
+        HoverSystemButtonsIconsColor="#FFFFFF";
+        HoverSessionButtonTextColor="#FFFFFF";
+        HoverVirtualKeyboardButtonTextColor="#FFFFFF";
+
+        BlurMax="48";
+        Blur="1.0";
+
+        Background = "Backgrounds/520181.png";
+      };
+    }).overrideAttrs (oldAttrs: {
+      installPhase = oldAttrs.installPhase + ''
+        chmod u+w $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/
+        cp ${./wallpaper/nix-d-nord-aurora-crop.png} \
+          $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/520181.png
+      '';
+    }))
+
+  ];
+
+  # Hyprland
+  programs.hyprland = {
+    enable = true;
+    portalPackage = pkgs.xdg-desktop-portal-hyprland;
+  };
 
   xdg.portal = {
     enable = true;
@@ -130,15 +189,8 @@
       pkgs.xdg-desktop-portal-hyprland
     ];
   };
-  
 
-  #Enables hyprland
-  programs.hyprland = {
-    enable = true;
-    portalPackage = pkgs.xdg-desktop-portal-hyprland;
-  };
-
-  # Install firefox.
+  # Browser
   programs.firefox.enable = true;
 
   # Allow dynamically-linked executables (have to read more/allows Julia Pkgs)
@@ -149,79 +201,15 @@
       gfortran.cc.lib
     ];
   };
- 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
-    git
-    neovim
-    wl-clipboard
-    kitty
-    #kdePackages.dolphin
-    yazi
-    mako
-    tofi
-    pavucontrol
-    hyprcursor
-    hyprlock
-    hypridle
-    hyprshot
-    hyprsunset
-    brightnessctl
-    nerd-fonts.ubuntu-mono
-    nerd-fonts.symbols-only
-    material-design-icons
-    nerd-fonts.ubuntu
-    rose-pine-hyprcursor
-    blueberry
-    swaybg
-    eog
-    udiskie
-    kdePackages.polkit-kde-agent-1
-    networkmanagerapplet
-    clipse
-    #(catppuccin-sddm.override {
-    #  flavor = "mocha";
-    #  font = "UbuntuMono Nerd Font Mono";
-    #  fontSize = "16";
-    #  background = ./wallpaper/nix-d-nord-aurora-crop.png;
-    #  loginBackground = true;
-    #  })
-    sbctl #secure boot key generator
-    libnotify #Library that sends desktop notifications to a daemon
-];
-
-  
+  # System fonts
   fonts.packages = with pkgs; [
     nerd-fonts.ubuntu-mono
     nerd-fonts.symbols-only
     material-design-icons
+    nerd-fonts.ubuntu
   ]; 
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking`.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
+ 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave

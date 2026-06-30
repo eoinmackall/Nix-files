@@ -28,7 +28,7 @@
             home-manager.users.eoinm = {
               imports = [
                 ./home.nix
-		inputs.noctalia.homeModules.default
+                inputs.noctalia.homeModules.default
               ];
             };
           }

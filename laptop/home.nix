@@ -8,7 +8,7 @@
     ./hyprland/hyprland-configuration.nix
     ./hyprland/hyprlock-configuration.nix
     ./neovim/neovim-configuration.nix
-    ./waybar/waybar-configuration.nix
+    ./noctalia/noctalia-configuration.nix
     ./tofi/tofi-configuration.nix
   ];
   
