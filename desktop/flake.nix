@@ -2,7 +2,7 @@
   description = "NixOS-desktop config flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,7 +28,7 @@
             home-manager.users.eoinm = {
               imports = [
                 ./home.nix
-                inputs.noctalia.homeModules.default
+		inputs.noctalia.homeModules.default
               ];
             };
           }

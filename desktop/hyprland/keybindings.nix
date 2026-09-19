@@ -10,14 +10,13 @@
       "$mainMod, T, exec, $terminal"
       "$mainMod, C, killactive,"
       "$mainMod, F, exec, $fileManager"
-      "$mainMod, G, exec, firefox https://gemini.google.com"
+      "$mainMod, G, exec, /etc/nixos/scripts/ai-menu.sh"
       "$mainMod, V, togglefloating,"
-      "$mainMod, M, exec, /etc/nixos/scripts/tofi-menu.sh"
+      "$mainMod, M, exec, /etc/nixos/scripts/browser-menu.sh"
       "$mainMod, B, exec, $browser"
-      "$mainMod, P, exec, /etc/nixos/scripts/power-menu.sh" 
       "$mainMod, I, layoutmsg, togglesplit" # dwindle
       "$mainMod SHIFT, F, fullscreen,"
-      "$mainMod, Print, exec, grim -g \"$(slurp)\" - | wl-copy"
+      " , Print, exec, /etc/nixos/scripts/screenshot-menu.sh"
       
       # Move focus with mainMod + VIM keys
       "$mainMod, H, movefocus, l"

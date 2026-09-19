@@ -1,0 +1,20 @@
+/* ~/.config/waybar/theme.css */
+
+/* ----------------- */
+/* Catppuccin Macchiato Palette */
+/* ----------------- */
+
+@define-color base   #24273a; /* The main background color */
+@define-color text   #cad3f5; /* The main text color */
+@define-color subtext #a5adce; /* Lighter text for secondary info */
+
+@define-color overlay #10121c; /* Used for tooltip backgrounds */
+@define-color overlay-border #595e80;
+
+@define-color surface #363a4f; /* A slightly lighter background for hover states */
+@define-color surface-active #494d64;
+
+@define-color accent #89b4fa; /* Accent color for active/urgent elements */
+@define-color urgent #ed8796; /* Red for urgent states like low battery */
+@define-color warning #eed49f;/* Yellow for warnings */
+@define-color success #a6da95;/* Green for success states */

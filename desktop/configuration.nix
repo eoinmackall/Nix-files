@@ -125,14 +125,13 @@
     git
     kitty
     wl-clipboard
-    grim
-    slurp
     clipse
     yazi
     pavucontrol
     hyprcursor
     hyprlock
     hypridle
+    hyprshot
     hyprsunset
     brightnessctl
     udiskie
@@ -140,7 +139,6 @@
     hyprpolkitagent
     thunderbird
     libmtp
-    jmtpfs
     (llama-cpp.override { cudaSupport = true; }) 
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
     ((pkgs.sddm-astronaut.override {

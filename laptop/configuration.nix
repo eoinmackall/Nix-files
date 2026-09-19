@@ -74,15 +74,21 @@
     pulse.enable = true;
   };
  
-  #Enables D-bus (communication middleware)
+  # Enables D-bus (communication middleware)
   services.dbus.enable = true;
 
-  #Enables automatic disk mounting
+  # Enables automatic disk mounting
   services.devmon.enable = true;
   services.gvfs.enable = true;
   services.udisks2.enable = true;
 
-  #Enables Flatpaks/Flathub
+  # Enables local chat inteface
+  services.open-webui = {
+    enable = true;
+    port = 8080;
+  };
+
+  # Enables Flatpaks/Flathub
   services.flatpak.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -103,7 +109,6 @@
     wl-clipboard
     kitty
     yazi
-    tofi
     pavucontrol
     hyprcursor
     hyprlock
@@ -112,13 +117,14 @@
     hyprsunset
     brightnessctl
     rose-pine-hyprcursor
-    blueberry
     eog
     udiskie
     hyprpolkitagent
     clipse
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
     sbctl #secure boot key generator
+    claude-code
+    antigravity-cli
     ((pkgs.sddm-astronaut.override {
       embeddedTheme = "jake_the_dog";
       themeConfig = {
@@ -174,12 +180,12 @@
           $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/520181.png
       '';
     }))
-
   ];
 
   # Hyprland
   programs.hyprland = {
     enable = true;
+    withUWSM = true;
     portalPackage = pkgs.xdg-desktop-portal-hyprland;
   };
 

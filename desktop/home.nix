@@ -63,6 +63,7 @@
         soul
       ]
     ))
+    libreoffice
     open-webui
   ];
 

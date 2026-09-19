@@ -9,7 +9,6 @@
     ./hyprland/hyprlock-configuration.nix
     ./neovim/neovim-configuration.nix
     ./noctalia/noctalia-configuration.nix
-    ./tofi/tofi-configuration.nix
   ];
   
   services.ssh-agent.enable = true;
@@ -64,6 +63,7 @@
 	]
       ))
     obs-studio
+    libreoffice
     thunderbird
   ];
 

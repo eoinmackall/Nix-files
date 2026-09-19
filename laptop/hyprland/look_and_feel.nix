@@ -82,7 +82,7 @@
     };
 
     layerrule = [
-      "noanim, ^(launcher)"
+      #"noanim, ^(launcher)"
     ];
 
     # Ref https://wiki.hypr.land/Configuring/Workspace-Rules/
@@ -101,7 +101,7 @@
 
     # See https://wiki.hypr.land/Configuring/Dwindle-Layout/ for more
     dwindle = {
-      pseudotile = true; # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+      # pseudotile = true; # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
       preserve_split = true; # You probably want this
     };
 

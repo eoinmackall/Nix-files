@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 Menu_option=$(echo -e "System
-Yazi" | tofi)
+Yazi" | noctalia dmenu -p "Keybindings")
 
 case "$Menu_option" in
 

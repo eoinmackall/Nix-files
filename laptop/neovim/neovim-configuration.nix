@@ -31,12 +31,7 @@
       python
       julia
       ]));
-      type = "lua";
-      config = ''
-        require('nvim-treesitter.configs').setup {
-	  highlight = { enable = true },
-      }
-      '';
+      type = "lua"; 
       }
       {
         plugin = which-key-nvim;
